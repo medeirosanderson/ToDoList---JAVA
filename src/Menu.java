@@ -1,8 +1,10 @@
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import Exceptions.OpcaoInvalidaException;
 
 public class Menu {
+    static Scanner sc = new Scanner(System.in);
 
     private List<Tarefa> minhasTarefas = new ArrayList<>();
 
@@ -14,10 +16,11 @@ public class Menu {
         this.minhasTarefas = minhasTarefas;
     }
 
-    public void iniciarMenu(){
+    public void iniciarMenu() {
         Scanner sc = new Scanner(System.in);
-        int opcao = 0;
-
+        int opcao = -1;
+        
+        while (opcao!=0) {
         System.out.println("================================================");
         System.out.println("\t\tLista de Tarefas");
         System.out.println("================================================");
@@ -32,25 +35,27 @@ public class Menu {
 
         System.out.println("Digite sua opção: ");
         opcao = sc.nextInt();
-
-        switch (opcao) {
-            case 1:
-                abrirTarefaMenu();
-                break;
-            case 2:
-                adicionarTarefaMenu();
-                break;
-            case 3:
-                mostrarConcluidas();
-                break;
-            case 0:
-                System.out.println("Você saiu do programa... Até mais!");
-                break;
-            default:
-                System.out.println("Opção Invalida!");
-                break;
+            try{
+                switch (opcao) {
+                    case 1:
+                        abrirTarefaMenu();
+                        break;
+                    case 2:
+                        adicionarTarefaMenu();
+                        break;
+                    case 3:
+                        mostrarConcluidas();
+                        break;
+                    case 0:
+                        System.out.println("Você saiu do programa... Até mais!");
+                        break;
+                    default:
+                        throw new OpcaoInvalidaException("Opção Invalida, tente novamente.");
+                }
+            } catch(OpcaoInvalidaException e){
+                System.out.println(e.getMessage());
+            }  
         }
-
         sc.close();
     }
 
@@ -84,7 +89,6 @@ public class Menu {
     }
 
     public void abrirTarefaMenu(){
-        Scanner sc = new Scanner(System.in);
         System.out.println("================================================");
         System.out.println("\t\tInforme o ID da tarefa");
         System.out.println("================================================");
@@ -144,7 +148,6 @@ public class Menu {
     }
                 
     public void voltarMenu(){
-        Scanner sc = new Scanner(System.in);
         System.out.println("Deseja voltar ao menu? [S/N]");
         String opcao = sc.nextLine();
         if (opcao.toLowerCase().equals("s")) {
@@ -176,7 +179,6 @@ public class Menu {
     }
 
     public void adicionarTarefaMenu(){
-        Scanner sc = new Scanner(System.in);
         System.out.println("================================================");
         System.out.println("\t Adicionar Nova Tarefa");
         System.out.println("================================================");
@@ -190,5 +192,4 @@ public class Menu {
         voltarMenu();
         sc.close();
     }
-
 }
