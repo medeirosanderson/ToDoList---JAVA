@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 import Exceptions.OpcaoInvalidaException;
@@ -17,7 +18,6 @@ public class Menu {
     }
 
     public void iniciarMenu() {
-        Scanner sc = new Scanner(System.in);
         int opcao = -1;
         
         while (opcao!=0) {
@@ -34,7 +34,14 @@ public class Menu {
         System.out.println("[0] - Sair");
 
         System.out.println("Digite sua opção: ");
-        opcao = sc.nextInt();
+        
+        try {
+            opcao = sc.nextInt();
+        } catch (InputMismatchException e) {
+            System.out.println("Digite apenas números!");
+            sc.nextLine();
+            continue;
+        }
             try{
                 switch (opcao) {
                     case 1:
@@ -56,7 +63,6 @@ public class Menu {
                 System.out.println(e.getMessage());
             }  
         }
-        sc.close();
     }
 
     public void inicializarLista(){
@@ -144,18 +150,36 @@ public class Menu {
                     break;
             }
         }
-        sc.close();
     }
                 
-    public void voltarMenu(){
-        System.out.println("Deseja voltar ao menu? [S/N]");
-        String opcao = sc.nextLine();
-        if (opcao.toLowerCase().equals("s")) {
-            iniciarMenu();
-        } else {
-            System.out.println("Você saiu do sistema...");
+    public void voltarMenu (){
+        
+        boolean respostaValida = false;
+        
+        while (!respostaValida) {
+
+            System.out.println("Deseja voltar ao menu? [S/N]");
+            String opcao = sc.nextLine();
+
+            try {
+                if (opcao.equalsIgnoreCase("s")) {
+                    respostaValida = true;
+                    iniciarMenu();
+                }
+                else if (opcao.equalsIgnoreCase("n")) {
+                    System.out.println("Você saiu do sistema...");
+                    sc.close();
+                    System.exit(0);
+                }
+    
+                else {
+                    throw new OpcaoInvalidaException("Opção Invalida, tente novamente.");
+                }
+    
+            } catch (OpcaoInvalidaException e) {
+                System.out.println(e.getMessage());
+            }
         }
-        sc.close();
     }
 
     public void mostrarConcluidas(){
@@ -190,6 +214,5 @@ public class Menu {
         System.out.println("Tarefa Adicionada com sucesso!");
         System.out.println();
         voltarMenu();
-        sc.close();
     }
 }
