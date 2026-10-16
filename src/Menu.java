@@ -3,6 +3,7 @@ import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 import Exceptions.OpcaoInvalidaException;
+import Exceptions.TarefaNaoEncontradaException;
 
 public class Menu {
     static Scanner sc = new Scanner(System.in);
@@ -98,7 +99,16 @@ public class Menu {
         System.out.println("================================================");
         System.out.println("\t\tInforme o ID da tarefa");
         System.out.println("================================================");
-        int opcao = sc.nextInt();
+        int opcao;
+
+        try {
+            opcao = sc.nextInt();
+        } catch (InputMismatchException e) {
+            System.out.println("Digite apenas Números!");
+            sc.nextLine();
+            return;
+        }
+
         int posição = opcao -1;
         boolean idVerificado = false;
         int tamanhoLista = minhasTarefas.size();
@@ -119,8 +129,13 @@ public class Menu {
             System.out.println();
             System.out.println("[1] - Editar Tarefa \t [2] - Concluir Tarefa \t [3] - Excluir Tarefa");
             System.out.println("[0] - Voltar");
-            opcao = sc.nextInt();
-            sc.nextLine();
+            try {
+                opcao = sc.nextInt();
+            } catch (InputMismatchException e) {
+                System.out.println("Digite apenas Números!");
+                sc.nextLine();
+                return;
+            }
             switch (opcao) {
                 case 1:
                     System.out.println("Digite a nova descrição: ");
@@ -214,5 +229,15 @@ public class Menu {
         System.out.println("Tarefa Adicionada com sucesso!");
         System.out.println();
         voltarMenu();
+    }
+
+    public Tarefa buscarTarefa(List<Tarefa> minhasTarefas, Integer id)
+    throws TarefaNaoEncontradaException {
+        for (Tarefa tarefa : minhasTarefas) {
+            if (tarefa.getId() == id) {
+                return tarefa;
+            }
+        }
+        throw new TarefaNaoEncontradaException("Tarefa não Encontrada!");
     }
 }

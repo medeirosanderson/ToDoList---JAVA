@@ -52,8 +52,7 @@ public class Tarefa {
         boolean tarefaIgual = false;
         if(obj instanceof Tarefa){
             Tarefa novaTarefa = (Tarefa) obj;
-            tarefaIgual = this.getDescricao().toLowerCase()
-            .equals(novaTarefa.getDescricao().toLowerCase());
+            tarefaIgual = this.getId() == (novaTarefa.getId());
         }
         return tarefaIgual;
     }
